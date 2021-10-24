@@ -26,6 +26,11 @@ export default RestModel.extend({
         icon: "exclamation-circle",
       },
       {
+        id: "flagged",
+        name: I18n.t("chat_integration.filter.flagged"),
+        icon: "exclamation-circle",
+      },
+      {
         id: "follow",
         name: I18n.t("chat_integration.filter.follow"),
         icon: "circle",

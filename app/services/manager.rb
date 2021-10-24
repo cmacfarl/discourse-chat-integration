@@ -7,7 +7,7 @@ module DiscourseChatIntegration
       Guardian.new(User.find_by(username: SiteSetting.chat_integration_discourse_username))
     end
 
-    def self.trigger_notifications(post_id)
+    def self.trigger_notifications(post_id, flagged)
       post = Post.find_by(id: post_id)
 
       # Abort if the chat_user doesn't have permission to see the post
@@ -51,8 +51,8 @@ module DiscourseChatIntegration
       end
 
       # Sort by order of precedence
-      t_prec = { 'group_message' => 0, 'group_mention' => 1, 'normal' => 2 } # Group things win
-      f_prec = { 'mute' => 0, 'thread' => 1, 'watch' => 2, 'follow' => 3 } #(mute always wins; thread beats watch beats follow)
+      t_prec = { 'group_message' => 1, 'group_mention' => 2, 'normal' => 3 } # Group things win
+      f_prec = { 'mute' => 0, 'flagged' => 1, 'thread' => 2, 'watch' => 3, 'follow' => 4 } #(mute always wins; thread beats watch beats follow)
       sort_func = proc { |a, b| [t_prec[a.type], f_prec[a.filter]] <=> [t_prec[b.type], f_prec[b.filter]] }
       matching_rules = matching_rules.sort(&sort_func)
 
@@ -68,6 +68,12 @@ module DiscourseChatIntegration
         matching_rules = matching_rules.select { |rule| rule.filter != "follow" }
       end
 
+      # If this is a flagged post, select only rules that are "flagged" rules
+      if flagged
+        matching_rules = matching_rules.select { |rule| rule.filter == "flagged" }
+      end
+
+
       # All remaining rules now require a notification to be sent
       # If there are none left, abort
       return false if matching_rules.empty?
@@ -78,6 +84,7 @@ module DiscourseChatIntegration
         next unless channel = rule.channel
         next unless provider = ::DiscourseChatIntegration::Provider.get_by_name(channel.provider)
         next unless is_enabled = ::DiscourseChatIntegration::Provider.is_enabled(provider)
+        next unless (rule.filter != 'flagged') || (rule.filter == 'flagged' && flagged == true)
 
         begin
           provider.trigger_notification(post, channel, rule)

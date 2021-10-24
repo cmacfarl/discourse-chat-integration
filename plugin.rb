@@ -22,7 +22,15 @@ after_initialize do
   on(:post_created) do |post|
     # This will run for every post, even PMs. Don't worry, they're filtered out later.
     time = SiteSetting.chat_integration_delay_seconds.seconds
-    Jobs.enqueue_in(time, :notify_chats, post_id: post.id)
+    Jobs.enqueue_in(time, :notify_chats, post_id: post.id, flagged: false)
+  end
+
+  on(:reviewable_created) do |reviewable|
+    # Only queue flagged posts.
+    time = SiteSetting.chat_integration_delay_seconds.seconds
+    if reviewable.instance_of? ReviewableFlaggedPost
+      Jobs.enqueue_in(time, :notify_chats, post_id: reviewable.target_id, flagged: true)
+    end
   end
 
   add_admin_route 'chat_integration.menu_title', 'chat-integration'
