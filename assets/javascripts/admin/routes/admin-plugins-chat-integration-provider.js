@@ -1,17 +1,17 @@
 import DiscourseRoute from "discourse/routes/discourse";
 import Group from "discourse/models/group";
+import { action } from "@ember/object";
+import RSVP from "rsvp";
 
 export default DiscourseRoute.extend({
   model(params) {
-    return Ember.RSVP.hash({
+    return RSVP.hash({
       channels: this.store.findAll("channel", { provider: params.provider }),
       provider: this.modelFor("admin-plugins-chat-integration").findBy(
         "id",
         params.provider
       ),
-      groups: Group.findAll().then((groups) => {
-        return groups.filter((g) => !g.get("automatic"));
-      }),
+      groups: Group.findAll(),
     }).then((value) => {
       value.channels.forEach((channel) => {
         channel.set(
@@ -32,18 +32,18 @@ export default DiscourseRoute.extend({
     return { provider: model["provider"].get("id") };
   },
 
-  actions: {
-    closeModal() {
-      if (this.get("controller.modalShowing")) {
-        this.refresh();
-        this.set("controller.modalShowing", false);
-      }
-
-      return true; // Continue bubbling up, so the modal actually closes
-    },
-
-    refreshProvider() {
+  @action
+  closeModal() {
+    if (this.get("controller.modalShowing")) {
       this.refresh();
-    },
+      this.set("controller.modalShowing", false);
+    }
+
+    return true; // Continue bubbling up, so the modal actually closes
+  },
+
+  @action
+  refreshProvider() {
+    this.refresh();
   },
 });

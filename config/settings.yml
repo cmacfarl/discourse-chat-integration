@@ -26,6 +26,8 @@ chat_integration:
     regex: '^https:\/\/hooks\.slack\.com\/services\/.+$'
   chat_integration_slack_icon_url:
     default: ''
+  chat_integration_slack_transcript_quote:
+    default: true
 
 #######################################
 ######### TELEGRAM SETTINGS ###########
@@ -51,6 +53,15 @@ chat_integration:
     default: ""
   chat_integration_discord_excerpt_length:
     default: 400
+  
+#######################################
+########## GUILDED SETTINGS ###########
+#######################################
+  chat_integration_guilded_enabled:
+    default: false
+  chat_integration_guilded_excerpt_length:
+    default: 400
+  
 
 #######################################
 ######## MATTERMOST SETTINGS ##########

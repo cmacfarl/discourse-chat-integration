@@ -105,6 +105,15 @@ he:
             webhook_url:
               title: כתובת התלייה
               help: כתובת ההתלייה נוצרה בהגדרות שרת ה־Discord שלך
+        guilded:
+          title: "Guilded"
+          param:
+            name:
+              title: "שם"
+              help: "שם לתיאור הערוץ. לא משמש לחיבור אל Guilded"
+            webhook_url:
+              title: כתובת התלייה
+              help: כתובת ההתלייה נוצרה בהגדרות שרת ה־Guilded שלך
         mattermost:
           title: "Mattermost"
           param:
@@ -176,7 +185,7 @@ he:
               help: "שם ערוץ ב־Teams, למשל: discourse"
             webhook_url:
               title: "כתובת התלייה"
-              help: "הכתובת שתסופק ביצירת התליית רשת נכנסת"
+              help: "הכתובת שתסופק ביצירת התליית רשת נכנסת חדשה"
           errors:
             invalid_channel: "ערוץ זה לא קיים ב־Microsoft Teams"
         webex:
@@ -199,3 +208,14 @@ he:
             webhook_url:
               title: "כתובת התלייה"
               help: "הכתובת שתסופק ביצירת התליית רשת חדשה"
+    discourse_automation:
+      scriptables:
+        send_slack_message:
+          title: שליחת הודעה ב־Slack
+          fields:
+            message:
+              label: הודעה
+            url:
+              label: כתובת
+            channel:
+              label: ערוץ

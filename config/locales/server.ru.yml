@@ -16,6 +16,7 @@ ru:
     chat_integration_slack_excerpt_length: 'Размер сообщения в Slack'
     chat_integration_slack_icon_url: 'URL логотипа для отображения в Slack (по умолчанию используется логотип форума)'
     chat_integration_slack_outbound_webhook_url: "URL для использования 'Incoming Webhook' в Slack вместо OAuth API. Использовать не рекомендуется."
+    chat_integration_slack_transcript_quote: Помещать slack-содержимое в теги [quote] ?
     errors:
       chat_integration_slack_api_configs_are_empty: "Вы должны ввести либо исходящий URL-адрес вебхука, либо токен доступа"
     chat_integration_telegram_enabled: "Включить чат-интеграцию с Telegram"
@@ -25,6 +26,8 @@ ru:
     chat_integration_discord_enabled: "Включить провайдера для чат-интеграции c Discord"
     chat_integration_discord_message_content: "Сообщение, размещаемое над сводкой при отправке уведомления в Discord"
     chat_integration_discord_excerpt_length: "Размер сообщения в Discord"
+    chat_integration_guilded_enabled: "Включить провайдера для чат-интеграции с Guilded"
+    chat_integration_guilded_excerpt_length: "Размер сообщения в Guilded"
     chat_integration_mattermost_enabled: "Включить провайдера для чат-интеграции c Mattermost"
     chat_integration_mattermost_webhook_url: 'URL для вебхука в Mattermost'
     chat_integration_mattermost_incoming_webhook_token: 'Токен подтверждения, используемый для аутентификации входящих запросов'
@@ -56,6 +59,10 @@ ru:
     chat_integration_webex_excerpt_length: "Размер сообщения в Webex Teams"
     chat_integration_google_enabled: "Включить провайдера для чат-интеграции c Google Chat"
     chat_integration_google_excerpt_length: "Размер сообщения в Google Chat"
+  discourse_automation:
+    scriptables:
+      send_slack_message:
+        title: Отправить Slack-сообщение
   chat_integration:
     all_categories: "(все категории)"
     deleted_category: "(удаленный раздел)"
@@ -103,6 +110,7 @@ ru:
           modal_title: "Создать стенограмму"
           modal_description: "Все сообщения в ветке обсуждения будут собраны в единое сообщение на форуме. Вам будет предоставлена возможность отредактировать стенограмму перед публикацией."
           transcript_ready: "Стенограмма готова"
+          continue_on_discourse: "Продолжить на форуме"
           error: "Что-то пошло не так при создании стенограммы, извините!"
           post_to_discourse: "Нажмите здесь, чтобы составить пост на Дискурсе с транскриптом"
           api_required: "Извините, эта интеграция не настроена для поддержки записи стенограмм."

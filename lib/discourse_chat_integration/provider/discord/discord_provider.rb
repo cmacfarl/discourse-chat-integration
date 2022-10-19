@@ -8,11 +8,11 @@ module DiscourseChatIntegration
 
       CHANNEL_PARAMETERS = [
         { key: "name", regex: '^\S+' },
-        { key: "webhook_url", regex: '^https:\/\/discord(?:app)?\.com\/api\/webhooks\/', unique: true, hidden: true }
+        { key: "webhook_url", regex: '^https:\/\/discord\.com\/api\/webhooks\/', unique: true, hidden: true }
       ].freeze
 
       def self.send_message(url, message)
-        http = Net::HTTP.new("discordapp.com", 443)
+        http = Net::HTTP.new("discord.com", 443)
         http.use_ssl = true
 
         uri = URI(url)
@@ -31,12 +31,7 @@ module DiscourseChatIntegration
 
       def self.generate_discord_message(post, flagged)
 
-        display_name = "@#{post.user.username}"
-        full_name = post.user.name || ""
-
-        if !(full_name.strip.empty?) && (full_name.strip.gsub(' ', '_').casecmp(post.user.username) != 0) && (full_name.strip.gsub(' ', '').casecmp(post.user.username) != 0)
-          display_name = "#{full_name} @#{post.user.username}"
-        end
+        display_name = ::DiscourseChatIntegration::Helper.formatted_display_name(post.user)
 
         topic = post.topic
 

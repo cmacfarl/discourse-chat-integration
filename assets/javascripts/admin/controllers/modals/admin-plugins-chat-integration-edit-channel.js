@@ -1,17 +1,18 @@
+import Controller from "@ember/controller";
 import I18n from "I18n";
 import ModalFunctionality from "discourse/mixins/modal-functionality";
 import { popupAjaxError } from "discourse/lib/ajax-error";
-import InputValidation from "discourse/models/input-validation";
-import {
-  default as computed,
-  observes,
-  on,
-} from "discourse-common/utils/decorators";
+import EmberObject, {
+  defineProperty,
+  computed as emberComputed,
+} from "@ember/object";
+import computed, { observes, on } from "discourse-common/utils/decorators";
+import { schedule } from "@ember/runloop";
 
-export default Ember.Controller.extend(ModalFunctionality, {
+export default Controller.extend(ModalFunctionality, {
   @on("init")
   setupKeydown() {
-    Ember.run.schedule("afterRender", () => {
+    schedule("afterRender", () => {
       $("#chat-integration-edit-channel-modal").keydown((e) => {
         if (e.keyCode === 13) {
           this.send("save");
@@ -27,14 +28,15 @@ export default Ember.Controller.extend(ModalFunctionality, {
       const theKeys = this.get("model.provider.channel_parameters").map(
         (param) => param["key"]
       );
-      Ember.defineProperty(
+      defineProperty(
         this,
         "paramValidation",
-        Ember.computed(
+        emberComputed(
           `model.channel.data.{${theKeys.join(",")}}`,
           this._paramValidation
         )
       );
+      this.notifyPropertyChange("paramValidation");
     }
   },
 
@@ -49,17 +51,17 @@ export default Ember.Controller.extend(ModalFunctionality, {
 
     if (val === "") {
       // Fail silently if field blank
-      return InputValidation.create({
+      return EmberObject.create({
         failed: true,
       });
     } else if (!regString) {
       // Pass silently if no regex available for provider
-      return InputValidation.create({
+      return EmberObject.create({
         ok: true,
       });
     } else if (regex.test(val)) {
       // Test against regex
-      return InputValidation.create({
+      return EmberObject.create({
         ok: true,
         reason: I18n.t(
           "chat_integration.edit_channel_modal.channel_validation.ok"
@@ -67,7 +69,7 @@ export default Ember.Controller.extend(ModalFunctionality, {
       });
     } else {
       // Failed regex
-      return InputValidation.create({
+      return EmberObject.create({
         failed: true,
         reason: I18n.t(
           "chat_integration.edit_channel_modal.channel_validation.fail"

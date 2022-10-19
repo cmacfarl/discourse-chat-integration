@@ -14,6 +14,7 @@ en:
     chat_integration_slack_excerpt_length: 'Slack post excerpt length'
     chat_integration_slack_icon_url: 'Icon to post to slack with (defaults to forum logo)'
     chat_integration_slack_outbound_webhook_url: "For using Slack's 'Incoming Webhook' system instead of of the OAuth API. Not recommended."
+    chat_integration_slack_transcript_quote: Wrap slack transcript in [quote] tags?
 
     errors:
       chat_integration_slack_api_configs_are_empty: "You must enter either an outbound webhook URL, or an access token"
@@ -32,6 +33,12 @@ en:
     chat_integration_discord_enabled: "Enable the Discord chat-integration provider"
     chat_integration_discord_message_content: "The message to include above the summary when sending a notification to Discord"
     chat_integration_discord_excerpt_length: "Discord post excerpt length"
+      
+    #######################################
+    ########## GUILDED SETTINGS ###########
+    #######################################
+    chat_integration_guilded_enabled: "Enable the Guilded chat-integration provider"
+    chat_integration_guilded_excerpt_length: "Guilded post excerpt length"
 
     #######################################
     ######## MATTERMOST SETTINGS ##########
@@ -104,6 +111,10 @@ en:
     chat_integration_google_enabled: "Enable the 'Google Chat' chat integration provider"
     chat_integration_google_excerpt_length: "Google Chat post excerpt length"
 
+  discourse_automation:
+    scriptables:
+      send_slack_message:
+        title: Send Slack message
   chat_integration:
 
     all_categories: "(all categories)"

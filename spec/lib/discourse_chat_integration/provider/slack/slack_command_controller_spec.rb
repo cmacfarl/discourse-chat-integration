@@ -3,6 +3,10 @@
 require 'rails_helper'
 
 describe 'Slack Command Controller', type: :request do
+  before do
+    Discourse.cache.clear
+  end
+
   let(:category) { Fabricate(:category) }
   let(:tag) { Fabricate(:tag) }
   let(:tag2) { Fabricate(:tag) }
@@ -109,7 +113,7 @@ describe 'Slack Command Controller', type: :request do
           expect(rule.tags).to eq(nil)
         end
 
-        context 'from an unknown channel' do
+        describe 'from an unknown channel' do
           it 'creates the channel' do
             post "/chat-integration/slack/command.json", params: {
               text: "watch #{category.slug}",

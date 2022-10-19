@@ -57,10 +57,8 @@
               <td>
                 {{category-chooser
                   name="category"
+                  none="chat_integration.all_categories"
                   value=model.rule.category_id
-                  rootNoneLabel="chat_integration.all_categories"
-                  rootNone=true
-                  overrideWidths=false
                 }}
               </td>
             </tr>
@@ -105,7 +103,7 @@
 <div class="modal-footer">
   {{d-button id="save-rule"
     class="btn-primary btn-large"
-    action="save"
+    action=(action "save")
     actionParam=model.rule
     title="chat_integration.edit_rule_modal.save"
     label="chat_integration.edit_rule_modal.save"

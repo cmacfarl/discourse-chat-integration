@@ -3,6 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe DiscourseChatIntegration::Provider::SlackProvider::SlackTranscript do
+  before do
+    Discourse.cache.clear
+  end
 
   let(:messages_fixture) {
     [
@@ -132,14 +135,14 @@ RSpec.describe DiscourseChatIntegration::Provider::SlackProvider::SlackTranscrip
       stub_request(:post, "https://slack.com/api/users.list")
         .to_return(status: 500, body: '')
 
-      expect(transcript.load_user_data).to be_falsey
+      expect(transcript.load_user_data).to eq(false)
     end
 
     it 'handles slack failure' do
       stub_request(:post, "https://slack.com/api/users.list")
         .to_return(status: 200, body: { ok: false }.to_json)
 
-      expect(transcript.load_user_data).to be_falsey
+      expect(transcript.load_user_data).to eq(false)
     end
   end
 
@@ -195,7 +198,7 @@ RSpec.describe DiscourseChatIntegration::Provider::SlackProvider::SlackTranscrip
 
       it 'includes slack thread identifiers in body' do
         text = thread_transcript.build_transcript
-        expect(text).to include("<!--SLACK_CHANNEL_ID=G1234;SLACK_TS=1501801629.052212-->")
+        expect(text).to include("<!--SLACK_CHANNEL_ID=#general;SLACK_TS=1501801629.052212-->")
       end
 
     end
@@ -312,6 +315,20 @@ RSpec.describe DiscourseChatIntegration::Provider::SlackProvider::SlackTranscrip
         END
 
         expect(text).to eq(expected)
+      end
+
+      it 'omits quote tags when disabled' do
+        transcript.set_last_message_by_index(1)
+
+        text = transcript.build_transcript
+        expect(text).to include("[quote]")
+        expect(text).to include("[/quote]")
+
+        SiteSetting.chat_integration_slack_transcript_quote = false
+
+        text = transcript.build_transcript
+        expect(text).not_to include("[quote]")
+        expect(text).not_to include("[/quote]")
       end
 
       it 'creates the slack UI correctly' do
